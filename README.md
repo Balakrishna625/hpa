@@ -20,14 +20,13 @@ kubectl get deployment metrics-server -n kube-system
 ## Step-03: Review Deploy our Application
 ```
 # Deploy
-kubectl apply -f kube-manifests/
+kubectl apply -f deploy.yaml
+kubectl apply -f svc.yaml
 
 # List Pods, Deploy & Service
 kubectl get pod,svc,deploy
 
-# Access Application (Only if our Cluster is Public Subnet)
-kubectl get nodes -o wide
-http://<Worker-Node-Public-IP>:31231
+# Access Application using loadbalancer dns name
 ```
 
 ## Step-04: Create a Horizontal Pod Autoscaler resource for the "hpa-demo-deployment" 
