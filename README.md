@@ -48,7 +48,8 @@ kubectl get hpa
 ## Step-05: Create the load & Verify how HPA is working
 ```
 # Generate Load
-kubectl run --generator=run-pod/v1 apache-bench -i --tty --rm --image=httpd -- ab -n 500000 -c 1000 http://hpa-demo-service-nginx.default.svc.cluster.local/ 
+kubectl run apache-bench -i --tty --rm --image=httpd -- ab -n 500000 -c 1000 http://hpa-demo-service-nginx.default.svc.cluster.local/
+
 
 # List all HPA
 kubectl get hpa
