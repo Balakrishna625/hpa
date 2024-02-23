@@ -22,6 +22,7 @@ kubectl get deployment metrics-server -n kube-system
 # Deploy
 kubectl apply -f deploy.yaml
 kubectl apply -f svc.yaml
+kubectl apply -f hpa.yaml
 
 # List Pods, Deploy & Service
 kubectl get pod,svc,deploy
