@@ -30,21 +30,19 @@ kubectl get pod,svc,deploy
 ```
 
 ## Step-04: Create a Horizontal Pod Autoscaler resource for the "hpa-demo-deployment" 
-- This command creates an autoscaler that targets 50 percent CPU utilization for the deployment, with a minimum of one pod and a maximum of ten pods. 
+- This hpa creates an autoscaler that targets 50 percent CPU utilization for the deployment, with a minimum of one pod and a maximum of ten pods. 
 - When the average CPU load is below 50 percent, the autoscaler tries to reduce the number of pods in the deployment, to a minimum of one. 
 - When the load is greater than 50 percent, the autoscaler tries to increase the number of pods in the deployment, up to a maximum of ten
 ```
-# Template
-kubectl autoscale deployment <deployment-name> --cpu-percent=50 --min=1 --max=10
 
-# Replace
-kubectl autoscale deployment hpa-demo-deployment --cpu-percent=50 --min=1 --max=10
+# creating hpa
+kubectl apply -f hpa.yaml
 
 # Describe HPA
-kubectl describe hpa/hpa-demo-deployment 
+kubectl describe hpa hpa-demo-deployment 
 
 # List HPA
-kubectl get horizontalpodautoscaler.autoscaling/hpa-demo-deployment 
+kubectl get hpa
 ```
 
 ## Step-05: Create the load & Verify how HPA is working
@@ -68,43 +66,6 @@ kubectl get pods
 ## Step-06: Cooldown / Scaledown
 - Default cooldown period is 5 minutes. 
 - Once CPU utilization of pods is less than 50%, it will starting terminating pods and will reach to minimum 1 pod as configured.
-
-
-## Step-07: Clean-Up
-```
-# Delete HPA
-kubectl delete hpa hpa-demo-deployment
-
-# Delete Deployment & Service
-kubectl delete -f kube-manifests/ 
-```
-
-## Step-08: Imperative vs Declarative for HPA
-- From Kubernetes v1.18 onwards, we have a declarative way of defining HPA policies using `behavior` object in yaml.
-- **Support for configurable scaling behavior**
-  - Starting from v1.18 the v2beta2 API allows scaling behavior to be configured through the HPA behavior field. 
-  - Behaviors are specified separately for scaling up and down in scaleUp or scaleDown section under the behavior field
-```yml
-behavior:
-  scaleDown:
-    stabilizationWindowSeconds: 300
-    policies:
-    - type: Percent
-      value: 100
-      periodSeconds: 15
-  scaleUp:
-    stabilizationWindowSeconds: 0
-    policies:
-    - type: Percent
-      value: 100
-      periodSeconds: 15
-    - type: Pods
-      value: 4
-      periodSeconds: 15
-    selectPolicy: Max
-```
-- **Reference:** Select V1.18 from top right corner on Kubernetes website for V1.18 documentation
-  -  https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
 
 
 
